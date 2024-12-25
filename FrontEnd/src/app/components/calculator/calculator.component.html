@@ -1,0 +1,26 @@
+<div class="container mt-2">
+    <div class="d-flex justify-content-center">
+        <div>
+            <h4>Select Component</h4>
+            <mat-form-field>
+                <mat-label>Components</mat-label>
+                <mat-select>
+                    @for (com of components; track com) {
+                    <mat-option (onSelectionChange)="filterType(com.id)" [value]="com.id">{{com.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="ms-5">
+            <h4>Select Component Type</h4>
+            <mat-form-field>
+                <mat-label>Component Type</mat-label>
+                <mat-select [disabled]="componentType.length === 0 ">
+                    @for (type of componentType; track type) {
+                    <mat-option [value]="type.id">{{type.name}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
+</div>

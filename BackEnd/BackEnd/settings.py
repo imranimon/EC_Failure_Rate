@@ -77,12 +77,12 @@ WSGI_APPLICATION = 'BackEnd.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',  # Use 'mysql' for MariaDB
-        'NAME': 'your_database_name',         # Replace with your database name
-        'USER': 'your_username',              # Replace with your database username
-        'PASSWORD': 'your_password',          # Replace with your database password
-        'HOST': 'localhost',                  # Database host (default: localhost)
-        'PORT': '3306',                       # Default MariaDB port
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ec_failure_rate',        
+        'USER': 'root',          
+        'PASSWORD': '',          
+        'HOST': 'localhost',                 
+        'PORT': '3306',                      
     }
 }
 
