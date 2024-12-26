@@ -24,7 +24,7 @@ class ComponentView(APIView):
 
 class ComponentTypeView(APIView):
     def get(self, request):
-        com_id = request.query_params.get('com_id', None)
+        com_id = request.query_params.get('comId', None)
         if not com_id:
             return Response({'message': 'You must provide a valid com_id'}, status=status.HTTP_400_BAD_REQUEST)
         component_types = ComponentType.objects.filter(component_id=com_id)
