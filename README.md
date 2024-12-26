@@ -5,14 +5,14 @@ This is the **EC Failure Rate Project**, a software tool designed to calculate t
 ## Project Structure
 
 - **BackEnd/**: Contains the backend implementation using Django and Django REST Framework (DRF). It handles API requests, database operations, and provides endpoints for frontend integration.
-- **FrontEnd/**: (Optional section if applicable) Contains the frontend implementation, possibly using Angular or another framework, to interact with the backend APIs.
+- **FrontEnd/**: Contains the frontend implementation using Angular, designed to interact seamlessly with the backend APIs.
 
 ## Features
 
 - **API Integration**: Robust backend APIs to calculate and manage component failure rates.
 - **Database Support**: Easily configurable database settings to store and retrieve data.
-- **Admin Dashboard**: Accessible through `<span>/admin</span>` for managing backend models and settings.
-- **Environment Variables**: Secure configuration using a `<span>.env</span>` file.
+- **Admin Dashboard**: Accessible through `/admin` for managing backend models and settings.
+- **Environment Variables**: Secure configuration using a `.env` file.
 
 ## Getting Started
 
