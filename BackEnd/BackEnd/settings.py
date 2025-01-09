@@ -1,14 +1,21 @@
 from pathlib import Path
 import environ
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 env = environ.Env(
-    DEBUG=(bool, False)
+    
 )
-environ.Env.read_env()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(BASE_DIR / '.env')
+
+# Debug: Check if environment variables are being loaded
+print(f"DB_NAME: {env('DB_NAME', default=None)}")
+print(f"SECRET_KEY: {env('SECRET_KEY', default=None)}")
+
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG', default=False)
 
 ALLOWED_HOSTS = []
 
