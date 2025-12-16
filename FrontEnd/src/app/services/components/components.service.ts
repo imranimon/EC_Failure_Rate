@@ -1,33 +1,47 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {Comp, CompType} from '../../interfaces/interface';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { CompCategory, CompType, Environment, CalculatorRequest, CalculatorResponse } from '../../interfaces/interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComponentsService {
+  
+  private baseUrl = 'http://127.0.0.1:8000/api';
 
-  private baseUrl = 'http://127.0.0.1:8000/';
-  private urlComponent = 'api/components/';
-  private urlComponentType = 'api/component-types/';
+  constructor(private http: HttpClient) { }
 
-  constructor(private http: HttpClient) {
+  getCategories(): Observable<CompCategory[]> {
+    return this.http.get<CompCategory[]>(`${this.baseUrl}/categories/`);
   }
 
-  private getFullUrl(url: string): string {
-    return this.baseUrl + url;
+  getComponentTypes(categoryId: number): Observable<CompType[]> {
+    return this.http.get<CompType[]>(`${this.baseUrl}/component-types/?categoryId=${categoryId}`);
   }
 
-  getComponents(): Observable<Comp[]> {
-    const fullUrl = this.getFullUrl(this.urlComponent);
-    return this.http.get<Comp[]>(fullUrl);
+  getEnvironments(): Observable<Environment[]> {
+    return this.http.get<Environment[]>(`${this.baseUrl}/environments/`);
   }
 
-  getComponentType(id: number): Observable<CompType[]> {
-    const url = this.urlComponentType + `?comId=${id}`;
-    const fullUrl = this.getFullUrl(url);
-    return this.http.get<CompType[]>(fullUrl);
+  calculateFailureRate(payload: CalculatorRequest): Observable<CalculatorResponse> {
+    return this.http.post<CalculatorResponse>(`${this.baseUrl}/calculate/`, payload);
   }
 
+
+  addComponentType(data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/component-types/`, data);
+  }
+
+  updateComponentType(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/component-types/${id}/`, data);
+  }
+
+  deleteComponentType(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/component-types/${id}/`);
+  }
+
+  updateEnvironment(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/environments/${id}/`, data);
+  }
 }

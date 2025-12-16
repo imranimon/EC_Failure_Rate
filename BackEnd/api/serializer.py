@@ -1,12 +1,17 @@
 from rest_framework import serializers
-from .models import Component, ComponentType
+from .models import ComponentCategory, ComponentType, Environment
 
-class ComponentSerializer(serializers.ModelSerializer):
+class ComponentCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Component
+        model = ComponentCategory
         fields = '__all__'
 
 class ComponentTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComponentType
-        fields = '__all__'       
+        fields = '__all__'
+
+class EnvironmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Environment
+        fields = '__all__'

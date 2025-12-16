@@ -1,2 +1,15 @@
-<app-header></app-header>
-<app-calculator></app-calculator>
+<mat-toolbar color="primary"  class="custom-toolbar">
+  <span>IEC 61709 Failure Rate Calculator</span>
+  <span class="example-spacer" style="flex: 1 1 auto;"></span>
+  
+  <a mat-button routerLink="/calculator" routerLinkActive="active-link">
+    📊 Calculator
+  </a>
+  <a mat-button routerLink="/config" routerLinkActive="active-link">
+    ⚙️ Database
+  </a>
+</mat-toolbar>
+
+<div class="container-fluid p-3">
+    <router-outlet></router-outlet>
+</div>

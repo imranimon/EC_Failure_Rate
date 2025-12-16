@@ -1,35 +1,199 @@
-<div class="main-container">
+<div class="container mt-4">
+  
   <div class="loading-overlay" *ngIf="loading">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">Loading...</div>
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
 
-  <div class="container mt-2">
-    <div class="d-flex justify-content-center">
-      <div>
-        <h4>Select Component</h4>
-        <mat-form-field>
-          <mat-label>Components</mat-label>
-          <mat-select (selectionChange)="onSelectComponent($event.value)">
-            @for (com of components; track com) {
-              <mat-option [value]="com.id">
-                {{ com.name }}
-              </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-      <div class="ms-5">
-        <h4>Select Component Type</h4>
-        <mat-form-field>
-          <mat-label>Component Type</mat-label>
-          <mat-select [disabled]="componentType.length === 0 ">
-            @for (type of componentType; track type) {
-              <mat-option [value]="type.id">{{ type.name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
+  <div class="row">
+    <div class="col-md-5 mb-4">
+      <mat-card class="p-4 shadow-sm">
+        <mat-card-header class="mb-3">
+          <mat-card-title>Component Parameters</mat-card-title>
+        </mat-card-header>
+        
+        <mat-card-content>
+          <mat-form-field class="w-100 mb-2">
+            <mat-label>Component Category</mat-label>
+            <mat-select [(value)]="selectedCategoryId" (selectionChange)="onCategorySelect($event.value)">
+              @for (cat of categories; track cat.id) {
+                <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-100 mb-2">
+            <mat-label>Component Type</mat-label>
+            <mat-select [(value)]="selectedTypeId" [disabled]="!componentTypes.length">
+              @for (type of componentTypes; track type.id) {
+                <mat-option [value]="type.id">{{ type.name }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="w-100 mb-2">
+            <mat-label>Environment</mat-label>
+            <mat-select [(value)]="selectedEnvId">
+              @for (env of environments; track env.id) {
+                <mat-option [value]="env.id">
+                  {{ env.name }} (x{{ env.pi_e_factor }})
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <mat-label>Op. Voltage (V)</mat-label>
+                <input matInput type="number" [(ngModel)]="voltOpInput">
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+               <mat-form-field class="w-100">
+                <mat-label>Op. Current (A)</mat-label>
+                <input matInput type="number" [(ngModel)]="currOpInput">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <mat-label>Rated Voltage (V)</mat-label>
+                <input matInput type="number" [(ngModel)]="voltRatedInput">
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+               <mat-form-field class="w-100">
+                <mat-label>Rated Current (A)</mat-label>
+                <input matInput type="number" [(ngModel)]="currRatedInput">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-6">
+              <mat-form-field class="w-100">
+                <mat-label>Temp (°C)</mat-label>
+                <input matInput type="number" [(ngModel)]="tempInput">
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+               <mat-form-field class="w-100">
+                <mat-label>Op. Power (W)</mat-label>
+                <input matInput type="number" [(ngModel)]="powerOpInput">
+                <mat-hint>For Resistors</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          
+          <hr class="my-3"> <div class="row">
+            <div class="col-6">
+               <mat-form-field class="w-100">
+                <mat-label>Quality Grade</mat-label>
+                <mat-select [(ngModel)]="qualityInput">
+                  @for (opt of qualityOptions; track opt.value) {
+                    <mat-option [value]="opt.value">{{ opt.name }} (x{{opt.value}})</mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+               <mat-form-field class="w-100">
+                <mat-label>Duty Cycle (%)</mat-label>
+                <input matInput type="number" min="1" max="100" [(ngModel)]="dutyCycleInput">
+                <mat-hint>Affects Graph Only</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </mat-card-content>
+        
+        <mat-card-actions>
+          <button mat-raised-button color="primary" class="w-100 py-2" (click)="onCalculate()" [disabled]="loading">
+            CALCULATE RELIABILITY
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+    <div class="col-md-7" *ngIf="result">
+      <mat-card class="p-4 bg-light border-success" style="border-left: 5px solid #198754;">
+        <mat-card-header>
+          <mat-card-title class="text-success">Calculation Results</mat-card-title>
+          <mat-card-subtitle>{{ result.component }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="mt-4">
+          <div class="row text-center">
+            <div class="col-md-6 mb-3">
+              <div class="p-3 bg-white rounded shadow-sm">
+                <h5 class="text-muted">Failure Rate (λ)</h5>
+                <h2 class="text-danger fw-bold">{{ result.lambda_final_fit | number:'1.2-4' }}</h2>
+                <small>FIT (Failures / 10⁹ hrs)</small>
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <div class="p-3 bg-white rounded shadow-sm">
+                <h5 class="text-muted">MTBF</h5>
+                <h2 class="text-primary fw-bold">{{ result.mtbf_hours | number:'1.0-0' }}</h2>
+                <small>Hours</small>
+              </div>
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+         <div class="alert alert-warning mt-3" *ngIf="(result.stress_details?.temp_rise ?? 0) > 0">
+            <strong>Self-Heating Detected:</strong> 
+            Component is {{ result.stress_details.temp_rise }}°C hotter than ambient. 
+            (Hotspot: {{ result.stress_details.temp_hotspot }}°C)
+          </div>
+
+          <h5 class="mb-3">Applied Stress Factors (π)</h5>
+          <div class="d-flex justify-content-between gap-2 flex-wrap">
+            <div class="p-2 border rounded bg-white w-100 text-center">
+              <strong>Temp (πT)</strong><br>
+              {{ result.pi_factors.pi_t }}
+            </div>
+            <div class="p-2 border rounded bg-white w-100 text-center">
+              <strong>Voltage (πU)</strong><br>
+              {{ result.pi_factors.pi_u }}
+            </div>
+            <div class="p-2 border rounded bg-white w-100 text-center">
+              <strong>Current (πI)</strong><br>
+              {{ result.pi_factors.pi_i }}
+            </div>
+            <div class="p-2 border rounded bg-white w-100 text-center">
+              <strong>Env (πE)</strong><br>
+              {{ result.pi_factors.pi_e }}
+            </div>
+            <div class="p-2 border rounded bg-white w-100 text-center">
+              <strong>Quality (πQ)</strong><br>
+              {{ result.pi_factors.pi_q }}
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="p-4 mt-4 shadow-sm">
+        <mat-card-header class="mb-3">
+          <mat-card-title>Reliability Curve (20 Years)</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div style="height: 300px;">
+            <canvas baseChart
+              [data]="lineChartData"
+              [options]="lineChartOptions"
+              [type]="'line'"
+              [legend]="lineChartLegend">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
     </div>
   </div>
 </div>

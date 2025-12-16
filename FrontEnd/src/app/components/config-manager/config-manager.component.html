@@ -1,0 +1,103 @@
+<div class="container mt-4">
+    <div class="loading-overlay" *ngIf="loading">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-primary m-0">Database Configuration</h2>
+    <button mat-raised-button color="primary" (click)="loadData()">
+      <mat-icon>refresh</mat-icon> Refresh Data
+    </button>
+  </div>
+
+  <mat-tab-group animationDuration="0ms" class="shadow-sm bg-white rounded border">
+    
+    <mat-tab label="Components Library">
+      <div class="p-3">
+        <p class="text-muted">Manage your component library here. Categories are fixed, but you can add specific types.</p>
+        
+        <mat-accordion multi>
+          @for (cat of categories; track cat.id) {
+            <mat-expansion-panel>
+              <mat-expansion-panel-header>
+                <mat-panel-title class="fw-bold">
+                  {{ cat.name }}
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{ typesByCategory[cat.id]?.length || 0 }} Components
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+
+              <table class="table table-hover mt-2 align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Name</th>
+                    <th>Base λ (FIT)</th>
+                    <th>Ref Temp</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (type of typesByCategory[cat.id]; track type.id) {
+                    <tr>
+                      <td>{{ type.name }}</td>
+                      <td>{{ type.lambda_ref }}</td>
+                      <td>{{ type.ref_temp }}°C</td>
+                      <td>
+                        <button mat-icon-button color="accent" (click)="onViewType(type)" matTooltip="View Details">
+                          <mat-icon>visibility</mat-icon>
+                        </button>
+                        <button mat-icon-button color="primary" (click)="onEditType(type)">
+                          <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDeleteType(type.id)">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                  @empty {
+                    <tr>
+                      <td colspan="4" class="text-center text-muted py-3">No components found. Add one!</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+
+              <div class="d-flex justify-content-end mt-2">
+                <button mat-flat-button color="accent" (click)="onAddType(cat.id, cat.name)">
+                  <mat-icon>add</mat-icon> Add {{ cat.name }}
+                </button>
+              </div>
+
+            </mat-expansion-panel>
+          }
+        </mat-accordion>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Environments">
+      <div class="p-3">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Pi_E Factor</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (env of environments; track env.id) {
+              <tr>
+                <td>{{ env.name }}</td>
+                <td><strong>x{{ env.pi_e_factor }}</strong></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+        <p class="text-muted small">*Environment factors are standard IEC values.</p>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

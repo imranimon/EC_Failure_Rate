@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>{{ formHeader }}</h2>
+
+<mat-dialog-content>
+  <div class="row">
+    <div class="col-12 mb-2">
+      <h6 class="text-primary border-bottom pb-1">Basic Information</h6>
+    </div>
+    
+    <div class="col-md-6">
+      <mat-form-field class="w-100">
+        <mat-label>Component Name</mat-label>
+        <input matInput [(ngModel)]="dataModel.name" [disabled]="isViewOnly" required>
+      </mat-form-field>
+    </div>
+    
+    <div class="col-md-6">
+      <mat-form-field class="w-100">
+        <mat-label>Base Failure Rate (λ Ref)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.lambda_ref" [disabled]="isViewOnly">
+        <mat-hint>FIT</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 mt-3 mb-2">
+      <h6 class="text-primary border-bottom pb-1">Thermal Physics</h6>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field class="w-100">
+        <mat-label>Ref Temp (°C)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.ref_temp" [disabled]="isViewOnly">
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field class="w-100">
+        <mat-label>Activation Energy (eV)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.activation_energy" [disabled]="isViewOnly">
+        <mat-hint>e.g. 0.7 for Silicon</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-4">
+      <mat-form-field class="w-100">
+        <mat-label>Thermal Res. (K/W)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.thermal_resistance" [disabled]="isViewOnly">
+        <mat-hint>For Self-Heating</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="col-12 mt-3 mb-2">
+      <h6 class="text-primary border-bottom pb-1">Stress Constants (IEC 61709)</h6>
+    </div>
+
+    <div class="col-md-3">
+      <mat-form-field class="w-100">
+        <mat-label>C1 (Voltage)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.c1_factor" [disabled]="isViewOnly">
+      </mat-form-field>
+    </div>
+    <div class="col-md-3">
+      <mat-form-field class="w-100">
+        <mat-label>C2 (Voltage)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.c2_factor" [disabled]="isViewOnly">
+      </mat-form-field>
+    </div>
+    <div class="col-md-6">
+       <mat-form-field class="w-100">
+        <mat-label>Ref Voltage Ratio</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.ref_voltage_ratio" [disabled]="isViewOnly">
+        <mat-hint>Usually 0.5 or 1.0</mat-hint>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-3">
+      <mat-form-field class="w-100">
+        <mat-label>C3 (Current)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.c3_factor" [disabled]="isViewOnly">
+      </mat-form-field>
+    </div>
+    <div class="col-md-3">
+      <mat-form-field class="w-100">
+        <mat-label>C4 (Current)</mat-label>
+        <input matInput type="number" [(ngModel)]="dataModel.c4_factor" [disabled]="isViewOnly">
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">{{ isViewOnly ? 'Close' : 'Cancel' }}</button>
+  <button mat-raised-button color="primary" (click)="onSave()" *ngIf="!isViewOnly">Save</button>
+</mat-dialog-actions>
