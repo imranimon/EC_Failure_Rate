@@ -7,3 +7,4 @@ packaging
 sqlparse
 tzdata
 pymysql
+cryptography

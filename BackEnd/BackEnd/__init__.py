@@ -1,4 +1,5 @@
 import pymysql
 
-# This makes pymysql pretend to be the standard driver
+pymysql.version_info = (2, 2, 6, "final", 0)
+
 pymysql.install_as_MySQLdb()
